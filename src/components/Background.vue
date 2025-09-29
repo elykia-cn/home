@@ -38,14 +38,16 @@ const bgRandom = Math.floor(Math.random() * 1 + 1);
 
 // 更换壁纸链接
 const changeBg = (type) => {
-  if (type == 0) {
+  
+  if (type === "0") {
     bgUrl.value = `/images/background${bgRandom}.jpg`;
-  } else if (type == 1) {
+  } else if (type === "1") {
     bgUrl.value = "https://api.dujin.org/bing/1920.php";
-  } else if (type == 2) {
+  } else if (type === "2") {
     bgUrl.value = "https://api.aixiaowai.cn/gqapi/gqapi.php";
-  } else if (type == 3) {
-    bgUrl.value = "https://api.aixiaowai.cn/api/api.php";
+  } else if (type === "3") {
+    const url = `https://api.nsmao.net/api/Img/query?key=${import.meta.env.VITE_WALLPAPERS_KEY}&sort=acg`;
+    bgUrl.value = url;
   }
 };
 

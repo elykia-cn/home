@@ -108,6 +108,7 @@ const activeName = ref("1");
 
 // 壁纸切换
 const radioChange = () => {
+  store.coverType = coverType.value;
   ElMessage({
     message: "壁纸更换成功",
     icon: h(SuccessPicture, {

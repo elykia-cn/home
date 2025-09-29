@@ -7,7 +7,7 @@
   {
     "icon": "Cloud",
     "name": "云盘",
-    "link": "https://alist.elykia.cn/"
+    "link": "https://pen.elykia.cn/"
   },
   {
     "icon": "Book",
@@ -16,17 +16,17 @@
   },
   {
     "icon": "Compass",
-    "name": "监测面板",
+    "name": "网站检测",
     "link": "https://status.elykia.cn/"
   },
   {
-    "icon": "Fire",
-    "name": "青龙面板",
-    "link": "https://qinglong.elykia.cn/"
+    "icon": "LaptopCode",
+    "name": "运维监控",
+    "link": "https://nezha.elykia.cn/"
   },
   {
-    "icon": "LaptopCode",
-    "name": "控制面板",
-    "link": "https://1panel.elykia.cn/"
+    "icon": "Fire",
+    "name": "访客统计",
+    "link": "https://umami.elykia.cn/"
   }
 ]

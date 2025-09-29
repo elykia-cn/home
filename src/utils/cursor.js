@@ -1,13 +1,6 @@
-import { isEqual } from "lodash-es";
-
 let mainCursor;
 
-const lerp = (a, b, n) => {
-  if (Math.round(a) === b) {
-    return b;
-  }
-  return (1 - n) * a + n * b;
-};
+Math.lerp = (a, b, n) => (1 - n) * a + n * b;
 
 const getStyle = (el, attr) => {
   try {
@@ -56,6 +49,7 @@ class Cursor {
     document.body.appendChild((this.scr = document.createElement("style")));
     this.scr.innerHTML = `* {cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8' width='10px' height='10px'><circle cx='4' cy='4' r='4' fill='white' /></svg>") 4 4, auto !important}`;
   }
+
   refresh() {
     this.scr.remove();
     this.cursor.classList.remove("active");
@@ -78,7 +72,6 @@ class Cursor {
         y: e.clientY - 8,
       };
       this.cursor.classList.remove("hidden");
-      this.render();
     };
     document.onmouseenter = () => this.cursor.classList.remove("hidden");
     document.onmouseleave = () => this.cursor.classList.add("hidden");
@@ -88,15 +81,13 @@ class Cursor {
 
   render() {
     if (this.pos.prev) {
-      this.pos.prev.x = lerp(this.pos.prev.x, this.pos.curr.x, 0.35);
-      this.pos.prev.y = lerp(this.pos.prev.y, this.pos.curr.y, 0.35);
+      this.pos.prev.x = Math.lerp(this.pos.prev.x, this.pos.curr.x, 0.35);
+      this.pos.prev.y = Math.lerp(this.pos.prev.y, this.pos.curr.y, 0.35);
       this.move(this.pos.prev.x, this.pos.prev.y);
     } else {
       this.pos.prev = this.pos.curr;
     }
-    if (!isEqual(this.pos.curr, this.pos.prev)) {
-      requestAnimationFrame(() => this.render());
-    }
+    requestAnimationFrame(() => this.render());
   }
 }
 

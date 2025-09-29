@@ -130,7 +130,7 @@ onBeforeUnmount(() => {
       }
       .weather {
         text-align: center;
-        width: 100%;
+        // width: 100%;
         text-overflow: ellipsis;
         overflow-x: hidden;
         white-space: nowrap;
