@@ -1,5 +1,6 @@
 import { h } from "vue";
 import { SpaCandle } from "@icon-park/vue-next";
+import dayjs from "dayjs";
 
 // 时钟
 export const getCurrentTime = () => {
@@ -25,47 +26,45 @@ export const getCurrentTime = () => {
 
 // 时光胶囊
 export const getTimeCapsule = () => {
-  // 日进度
-  const todayStartDate = new Date(new Date().toLocaleDateString()).getTime();
-  const todayPassHours = (new Date() - todayStartDate) / 1000 / 60 / 60;
-  const todayPassHoursPercent = (todayPassHours / 24) * 100;
-
-  // 周进度
-  const weeks = [7, 1, 2, 3, 4, 5, 6];
-  const weekDay = weeks[new Date().getDay()];
-  const weekDayPassPercent = (weekDay / 7) * 100;
-
-  // 月进度
-  const year = new Date().getFullYear();
-  const date = new Date().getDate();
-  const month = new Date().getMonth() + 1;
-  const monthAll = new Date(year, month, 0).getDate();
-  const monthPassPercent = (date / monthAll) * 100;
-
-  // 年进度
-  const yearStartDate = new Date(year, 0, 1).getTime();
-  const yearEndDate = new Date(year + 1, 0, 1).getTime();
-  const yearPassHours = (new Date() - yearStartDate) / 1000 / 60 / 60;
-  const yearTotalHours = (yearEndDate - yearStartDate) / 1000 / 60 / 60;
-  const yearPassPercent = (yearPassHours / yearTotalHours) * 100;
-
+  const now = dayjs();
+  const dayText = {
+    day: "今日",
+    week: "本周",
+    month: "本月",
+    year: "本年",
+  };
+  /**
+   * 计算时间差的函数
+   * @param {String} unit 时间单位，可以是 'day', 'week', 'month', 'year'
+   */
+  const getDifference = (unit) => {
+    // 获取当前时间单位的开始时间
+    const start = now.startOf(unit);
+    // 获取当前时间单位的结束时间
+    const end = now.endOf(unit);
+    // 计算总的天数或小时数
+    const total = end.diff(start, unit === "day" ? "hour" : "day") + 1;
+    // 计算已经过去的天数或小时数
+    let passed = now.diff(start, unit === "day" ? "hour" : "day");
+    if (unit === "week") {
+      passed = (passed + 6) % 7;
+    }
+    const remaining = total - passed;
+    const percentage = (passed / total) * 100;
+    // 返回数据
+    return {
+      name: dayText[unit],
+      total: total,
+      passed: passed,
+      remaining: remaining,
+      percentage: percentage.toFixed(2),
+    };
+  };
   return {
-    day: {
-      elapsed: Math.floor(todayPassHours),
-      pass: Math.floor(todayPassHoursPercent),
-    },
-    week: {
-      elapsed: weekDay,
-      pass: Math.floor(weekDayPassPercent),
-    },
-    month: {
-      elapsed: date,
-      pass: Math.floor(monthPassPercent),
-    },
-    year: {
-      elapsed: month - 1,
-      pass: Math.floor(yearPassPercent),
-    },
+    day: getDifference("day"),
+    week: getDifference("week"),
+    month: getDifference("month"),
+    year: getDifference("year"),
   };
 };
 
@@ -125,19 +124,21 @@ export const checkDays = () => {
 // 建站日期统计
 export const siteDateStatistics = (startDate) => {
   const currentDate = new Date();
-  const differenceInTime = currentDate.getTime() - startDate.getTime();
-  const differenceInDays = differenceInTime / (1000 * 3600 * 24);
-  const differenceInMonths = differenceInDays / 30;
-  const differenceInYears = differenceInMonths / 12;
-  if (differenceInYears >= 1) {
-    return `本站已经苟活了 ${Math.floor(differenceInYears)} 年 ${Math.floor(
-      differenceInMonths % 12,
-    )} 月 ${Math.round(differenceInDays % 30)} 天`;
-  } else if (differenceInMonths >= 1) {
-    return `本站已经苟活了 ${Math.floor(differenceInMonths)} 月 ${Math.round(
-      differenceInDays % 30,
-    )} 天`;
-  } else {
-    return `本站已经苟活了 ${Math.round(differenceInDays)} 天`;
+  let years = currentDate.getFullYear() - startDate.getFullYear();
+  let months = currentDate.getMonth() - startDate.getMonth();
+  let days = currentDate.getDate() - startDate.getDate();
+
+  // 如果天数或月份为负数，则调整天数和月份
+  if (days < 0) {
+    months--;
+    const lastMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 0);
+    days += lastMonth.getDate();
   }
+
+  if (months < 0) {
+    years--;
+    months += 12;
+  }
+
+  return `本站已经苟活了 ${years} 年 ${months} 月 ${days} 天`;
 };
