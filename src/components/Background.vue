@@ -42,9 +42,9 @@ const changeBg = (type) => {
   if (type === "0") {
     bgUrl.value = `/images/background${bgRandom}.jpg`;
   } else if (type === "1") {
-    bgUrl.value = "https://api.dujin.org/bing/1920.php";
+    bgUrl.value = `/images/background${bgRandom}.jpg`;
   } else if (type === "2") {
-    bgUrl.value = "https://api.aixiaowai.cn/gqapi/gqapi.php";
+    bgUrl.value = `/images/background${bgRandom}.jpg`;
   } else if (type === "3") {
     const url = `https://api.nsmao.net/api/Img/query?key=${import.meta.env.VITE_WALLPAPERS_KEY}&sort=acg`;
     bgUrl.value = url;
